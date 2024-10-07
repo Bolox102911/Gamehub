@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .game-button {
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            height: 50px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+        }
+        .game-button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Menu</h1>
+    <button class="game-button" onclick="openSnakeGame()">Snake Game</button>
+    <button class="game-button" onclick="openTicTacToe()">Tic Tac Toe</button>
+    <button class="game-button" onclick="openRockPaperScissors()">Rock Paper Scissors</button>
+    <button class="game-button" onclick="openPingPong()">Ping Pong</button>
+    <button class="game-button" onclick="openFlappyBird()">Flappy Bird</button>
+    <button class="game-button" onclick="openPigDice()">Pig Dice</button>
+    <button class="game-button" onclick="openGuessTheNumber()">Guess the Number</button>
+    <button class="game-button" onclick="openColorGuessingGame()">Color Guessing Game</button>
+    <button class="game-button" onclick="openCalculator()">Calculator</button>
+
+    <script>
+        function openSnakeGame() {
+            // Open snake game window
+            window.open("resources/snake_game.html", "_blank");
+        }
+
+        function openTicTacToe() {
+            // Open tic tac toe window
+            window.open("resources/tic_tac_toe.html", "_blank");
+        }
+
+        function openRockPaperScissors() {
+            // Open rock paper scissors window
+            window.open("resources/rock_paper_scissors.html", "_blank");
+        }
+
+        function openPingPong() {
+            // Open ping pong window
+            window.open("resources/ping_pong.html", "_blank");
+        }
+
+        function openFlappyBird() {
+            // Open flappy bird window
+            window.open("resources/flappy_bird.html", "_blank");
+        }
+
+        function openPigDice() {
+            // Open pig dice window
+            window.open("resources/pig_dice.html", "_blank");
+        }
+
+        function openGuessTheNumber() {
+            // Open guess the number window
+            window.open("resources/guess_the_number.html", "_blank");
+        }
+
+        function openColorGuessingGame() {
+            // Open color guessing game window
+            window.open("resources/color_guessing_game.html", "_blank");
+        }
+
+        function openCalculator() {
+            // Open calculator window
+            window.open("resources/calculator.html", "_blank");
+        }
+    </script>
+</body>
+</html>

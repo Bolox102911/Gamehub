@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="snakeCanvas" width="400" height="400" style="background-color:black;"></canvas>
+    <script>
+        const canvas = document.getElementById('snakeCanvas');
+        const context = canvas.getContext('2d');
+
+        let snake, direction, foodPosition, score;
+        let isGameOver = false;
+
+        function initializeGame() {
+            snake = [{ x: 200, y: 200 }, { x: 190, y: 200 }, { x: 180, y: 200 }];
+            direction = 'Right';
+            foodPosition = getRandomFoodPosition();
+            score = 0;
+            isGameOver = false;
+            drawSnake();
+            moveSnake();
+        }
+
+        function getRandomFoodPosition() {
+            return {
+                x: Math.floor(Math.random() * 40) * 10,
+                y: Math.floor(Math.random() * 40) * 10
+            };
+        }
+
+        function drawSnake() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw the head in red
+            context.fillStyle = 'red';
+            context.fillRect(snake[0].x, snake[0].y, 10, 10);
+
+            // Draw the body in green
+            context.fillStyle = 'green';
+            snake.slice(1).forEach(segment => {
+                context.fillRect(segment.x, segment.y, 10, 10);
+            });
+
+            // Draw the food in yellow
+            context.fillStyle = 'yellow';
+            context.fillRect(foodPosition.x, foodPosition.y, 10, 10);
+        }
+
+        function moveSnake() {
+            const head = { ...snake[0] };
+
+            // Move in the current direction
+            if (direction === 'Up') head.y -= 10;
+            else if (direction === 'Down') head.y += 10;
+            else if (direction === 'Left') head.x -= 10;
+            else if (direction === 'Right') head.x += 10;
+
+            snake.unshift(head);
+
+            if (head.x === foodPosition.x && head.y === foodPosition.y) {
+                score++;
+                foodPosition = getRandomFoodPosition();
+            } else {
+                snake.pop();
+            }
+
+            // Check for game over conditions
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snakeCollision()) {
+                isGameOver = true;
+                alert(`Game Over! Score: ${score}`);
+            } else {
+                drawSnake();
+                setTimeout(moveSnake, 100);
+            }
+        }
+
+        function snakeCollision() {
+            return snake.slice(1).some(segment => segment.x === snake[0].x && segment.y === snake[0].y);
+        }
+
+        function changeDirection(newDirection) {
+            if ((direction === 'Up' && newDirection !== 'Down') || 
+                (direction === 'Down' && newDirection !== 'Up') || 
+                (direction === 'Left' && newDirection !== 'Right') || 
+                (direction === 'Right' && newDirection !== 'Left')) {
+                direction = newDirection;
+            }
+        }
+
+        // Adding keyboard event listener for "W", "A", "S", "D" keys
+        window.addEventListener('keydown', (event) => {
+            if (isGameOver) {
+                initializeGame(); // Restart the game on first key press after game over
+            } else {
+                if (event.key === 'w') changeDirection('Up');
+                else if (event.key === 's') changeDirection('Down');
+                else if (event.key === 'a') changeDirection('Left');
+                else if (event.key === 'd') changeDirection('Right');
+            }
+        });
+
+        // Start the game for the first time
+        initializeGame();
+    </script>
+</body>
+</html>

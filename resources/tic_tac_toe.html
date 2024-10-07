@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+        }
+        button {
+            font-size: 20px;
+            height: 100px;
+            width: 100px;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div id="modeSelection">
+        <h2>Choose Mode</h2>
+        <button onclick="startGame(false)">Player vs Player</button>
+        <button onclick="startGame(true)">Player vs Bot</button>
+    </div>
+    
+    <div id="gameBoard" class="board" style="display:none;"></div>
+    <div id="status"></div>
+
+    <script>
+        let currentPlayer = "X";
+        let isBotMode = false;
+        let buttons = [];
+        
+        function startGame(botMode) {
+            isBotMode = botMode;
+            currentPlayer = "X";
+            buttons = Array.from(Array(3), () => Array(3).fill(""));
+            document.getElementById("modeSelection").style.display = "none";
+            createBoard();
+            updateStatus();
+        }
+
+        function createBoard() {
+            const board = document.getElementById("gameBoard");
+            board.style.display = "grid";
+            board.innerHTML = "";
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    const button = document.createElement("button");
+                    button.addEventListener("click", () => makeMove(i, j));
+                    button.innerText = "";
+                    board.appendChild(button);
+                    buttons[i][j] = button;
+                }
+            }
+        }
+
+        function makeMove(i, j) {
+            if (buttons[i][j].innerText === "" && !checkWinner()) {
+                buttons[i][j].innerText = currentPlayer;
+                if (checkWinner()) {
+                    updateStatus(`${currentPlayer} wins!`);
+                    return;
+                }
+                if (checkDraw()) {
+                    updateStatus("It's a draw!");
+                    return;
+                }
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                updateStatus();
+                if (isBotMode && currentPlayer === "O") {
+                    botMove();
+                }
+            }
+        }
+
+        function botMove() {
+            let emptyCells = [];
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (buttons[i][j].innerText === "") {
+                        emptyCells.push([i, j]);
+                    }
+                }
+            }
+            if (emptyCells.length > 0) {
+                const [i, j] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                makeMove(i, j);
+            }
+        }
+
+        function checkWinner() {
+            for (let i = 0; i < 3; i++) {
+                if (buttons[i][0].innerText === buttons[i][1].innerText && buttons[i][0].innerText === buttons[i][2].innerText && buttons[i][0].innerText !== "") {
+                    return true;
+                }
+                if (buttons[0][i].innerText === buttons[1][i].innerText && buttons[0][i].innerText === buttons[2][i].innerText && buttons[0][i].innerText !== "") {
+                    return true;
+                }
+            }
+            if (buttons[0][0].innerText === buttons[1][1].innerText && buttons[0][0].innerText === buttons[2][2].innerText && buttons[0][0].innerText !== "") {
+                return true;
+            }
+            if (buttons[0][2].innerText === buttons[1][1].innerText && buttons[0][2].innerText === buttons[2][0].innerText && buttons[0][2].innerText !== "") {
+                return true;
+            }
+            return false;
+        }
+
+        function checkDraw() {
+            return buttons.flat().every(button => button.innerText !== "");
+        }
+
+        function updateStatus(message = `${currentPlayer}'s turn`) {
+            document.getElementById("status").innerText = message;
+        }
+    </script>
+</body>
+</html>
